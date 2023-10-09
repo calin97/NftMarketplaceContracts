@@ -9,26 +9,26 @@ const { developmentChains } = require("../../helper-hardhat-config")
           const PRICE = ethers.parseEther("0.1")
           const TOKEN_ID = 0
 
-          beforeEach(async () => {
-            console.log("---------------------------1")
-              accounts = await ethers.getSigners() // could also do with getNamedAccounts
-              deployer = accounts[0]
-              user = accounts[1]
-              await deployments.fixture(["all", "basicNft"])
-            console.log("---------------------------2")
+          beforeEach("Set enviroment for test", async () => {
+            accounts = await ethers.getSigners()
+            deployer = accounts[0]
+            user = accounts[1]
+            await deployments.fixture(["all", "basicNft"])
+    
+            // deploy smart contract: QuantoPayVoting
+            const NftMarketplaceContract = await ethers.getContractFactory("NftMarketplace");
+            nftMarketplace = await NftMarketplaceContract.deploy();//here write the params from constructor
+            console.log(nftMarketplace.address,"==========================")
+            // await nftMarketplace.deployed();
 
-              nftMarketplaceContract = await ethers.getContract("NftMarketplace")
-              nftMarketplace = nftMarketplaceContract.connect(deployer)
-              basicNftContract = await ethers.getContract("BasicNft")
-              basicNft = basicNftContract.connect(deployer)
-            console.log("---------------------------3")
+            const BasicNftContract = await ethers.getContractFactory("BasicNft");
+            basicNftContract = await BasicNftContract.deploy();//here write the params from constructor
+            // await basicNftContract.deployed();
+            basicNft = basicNftContract.connect(deployer)
 
             //   await basicNft.mintNft()
             //   await basicNft.approve(nftMarketplaceContract.address, TOKEN_ID)
-              console.log("==2-2-2-2-2-2-2-2-2", nftMarketplaceContract.address)
-            console.log("---------------------------4")
-
-          })
+        });
 
           describe.skip("listItem", function () {
               it("emits an event after listing an item", async function () {
