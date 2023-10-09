@@ -23,6 +23,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         await verify(nftMarketplace.address, arguments)
     }
     log("----------------------------------------------------")
+    log("nftmarketplace address", nftMarketplace.address)
 }
 
-module.exports.tags = ["all", "NftMarketplace"]
+module.exports.tags = ["all", "nftmarketplace"]
